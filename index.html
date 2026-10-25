@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工业地坪造价估算器 · 环氧自流平 / 防静电 / 聚氨酯砂浆 包工包料价格区间</title>
+<meta name="description" content="输入面积、地坪体系和基层状况，估算工业地坪包工包料造价区间（材料+人工+机械）。参考区间来自长三角实际施工案例，最终价需现场勘测确认。支持环氧薄涂、环氧砂浆、环氧自流平、防静电环氧、聚氨酯砂浆、金刚砂耐磨、密封固化剂、地下车库。">
+<meta name="keywords" content="地坪造价,环氧地坪多少钱一平方,防静电地坪价格,聚氨酯砂浆单价,金刚砂耐磨价格,工业地坪报价">
+<link rel="canonical" href="https://hxqsmj.github.io/flooring-cost-estimator/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"工业地坪造价估算器",
+ "url":"https://hxqsmj.github.io/flooring-cost-estimator/",
+ "description":"输入面积与地坪体系，估算包工包料造价区间，支持环氧、防静电、聚氨酯砂浆、金刚砂耐磨等体系。",
+ "applicationCategory":"BusinessApplication","operatingSystem":"Web","inLanguage":"zh-CN","isAccessibleForFree":true,
+ "offers":{"@type":"Offer","price":"0","priceCurrency":"CNY"},
+ "creator":{"@type":"Organization","name":"嘉兴晨邦装饰工程有限公司","url":"https://jxnh.net/","telephone":"+86-18606859158"}}
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6fa;color:#243044;line-height:1.65;padding:24px 16px 60px}
+.wrap{max-width:720px;margin:0 auto}
+h1{font-size:24px;margin-bottom:8px;color:#1a3c6e}
+.sub{color:#667;font-size:14px;margin-bottom:22px}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(20,40,80,.06);margin-bottom:18px}
+label{display:block;font-size:14px;font-weight:600;margin:14px 0 6px}
+input,select{width:100%;padding:10px 12px;border:1px solid #d6dce8;border-radius:8px;font-size:15px;font-family:inherit}
+.row{display:flex;gap:12px}.row>div{flex:1}
+button{width:100%;margin-top:20px;padding:13px;background:#1a73e8;color:#fff;border:0;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
+button:hover{background:#1557b0}
+.out{display:none;margin-top:4px}
+.out.show{display:block}
+.big{font-size:30px;font-weight:700;color:#1a3c6e;letter-spacing:-.5px}
+.note{font-size:13px;color:#7a8599;margin-top:10px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+td{padding:8px 0;border-bottom:1px solid #eef1f6}
+td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.cta{margin-top:18px;padding:14px;background:#eef5ff;border-radius:10px;font-size:14px}
+.cta a{color:#1a73e8;text-decoration:none;font-weight:600}
+footer{text-align:center;font-size:13px;color:#8892a4;margin-top:26px}
+footer a{color:#1a73e8;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>工业地坪造价估算器</h1>
+<p class="sub">包工包料参考区间（材料 + 人工 + 机械）。用于前期预算判断，最终价以现场勘测为准。</p>
+
+<div class="card">
+  <label>施工面积（㎡）</label>
+  <input id="area" type="number" value="1000" min="10" step="10">
+  <label>地坪体系</label>
+  <select id="system"></select>
+  <div class="row">
+    <div>
+      <label>基层状况</label>
+      <select id="base">
+        <option value="1">新地面（未做面层）</option>
+        <option value="1.12">旧地面，需铣刨/打磨</option>
+        <option value="1.25">旧地面，有破损需修补</option>
+        <option value="1.4">基层起砂严重 / 需整体处理</option>
+      </select>
+    </div>
+    <div>
+      <label>区域类型</label>
+      <select id="zone">
+        <option value="1">普通生产区</option>
+        <option value="1.08">洁净要求（无尘/防静电区）</option>
+        <option value="1.06">车辆通行（叉车/货车）</option>
+        <option value="1.1">潮湿区 / 冲洗区</option>
+      </select>
+    </div>
+  </div>
+  <button onclick="calc()">估算造价</button>
+</div>
+
+<div class="card out" id="out">
+  <div class="big" id="total">—</div>
+  <div class="note">参考总价区间（含税，不含特殊基层处理与夜间施工）</div>
+  <table id="detail"></table>
+  <div class="cta">
+    需要准确报价？<a href="https://jxnh.net/quote" target="_blank" rel="noopener">在线提交询价</a>
+    或直接电话 <a href="tel:18606859158">186 0685 9158</a>（24 小时内免费上门勘测）。
+  </div>
+</div>
+
+<footer>
+  由 <a href="https://jxnh.net/" target="_blank" rel="noopener">嘉兴晨邦装饰工程有限公司</a> 维护 · 长三角工业地坪施工
+</footer>
+</div>
+
+<script>
+var SYSTEMS = [
+  {id:"epoxy-thin",  name:"环氧薄涂（0.5-1mm）",      lo:25,  hi:35,  days:0.03},
+  {id:"epoxy-mortar",name:"环氧砂浆（2-3mm）",        lo:45,  hi:70,  days:0.05},
+  {id:"self-level",  name:"环氧自流平（2-3mm）",       lo:25,  hi:60,  days:0.05},
+  {id:"antistatic",  name:"防静电环氧（2-3mm）",       lo:60,  hi:120, days:0.06},
+  {id:"pu-mortar",   name:"聚氨酯砂浆（6-9mm）",       lo:90,  hi:150, days:0.08},
+  {id:"carborundum", name:"金刚砂耐磨（3-5mm）",       lo:25,  hi:45,  days:0.04},
+  {id:"hardener",    name:"混凝土密封固化剂",           lo:15,  hi:25,  days:0.02},
+  {id:"parking",     name:"地下车库地坪（含标线）",     lo:35,  hi:70,  days:0.05}
+];
+var sel = document.getElementById("system");
+SYSTEMS.forEach(function(s){
+  var o = document.createElement("option");
+  o.value = s.id;
+  o.text = s.name + "　" + s.lo + "-" + s.hi + " 元/㎡";
+  sel.appendChild(o);
+});
+sel.value = "self-level";
+
+function fmt(n){ return n.toLocaleString("zh-CN", {maximumFractionDigits:0}); }
+
+function calc(){
+  var area = parseFloat(document.getElementById("area").value || "0");
+  if(!(area > 0)){ alert("请输入施工面积"); return; }
+  var sys = SYSTEMS.find(function(s){ return s.id === document.getElementById("system").value; });
+  var k = parseFloat(document.getElementById("base").value) * parseFloat(document.getElementById("zone").value);
+
+  var lo = sys.lo * k, hi = sys.hi * k;
+  var totalLo = lo * area, totalHi = hi * area;
+  var days = Math.max(2, Math.round(area * sys.days) + 3);
+
+  document.getElementById("total").textContent =
+    "¥ " + fmt(lo) + " - " + fmt(hi) + " 元/㎡　｜　合计 " + fmt(totalLo) + " - " + fmt(totalHi) + " 元";
+
+  var rows = [
+    ["地坪体系", sys.name],
+    ["施工面积", fmt(area) + " ㎡"],
+    ["综合单价（含基层系数）", fmt(lo) + " - " + fmt(hi) + " 元/㎡"],
+    ["材料约占", Math.round(lo*area*0.55) + " - " + Math.round(hi*area*0.6) + " 元"],
+    ["人工机械约占", Math.round(lo*area*0.4) + " - " + Math.round(hi*area*0.45) + " 元"],
+    ["预估工期", days + " 天左右（不含养护）"]
+  ];
+  document.getElementById("detail").innerHTML = rows.map(function(r){
+    return "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>";
+  }).join("");
+  document.getElementById("out").classList.add("show");
+}
+</script>
+</body>
+</html>
